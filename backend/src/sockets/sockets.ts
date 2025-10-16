@@ -102,8 +102,26 @@ export function sockets(io: Server) {
             if (error || !data) {
                 return rejectJoin('Space not found.')
             }
-            const { data: profile, error: profileError } = await supabase.from('profiles').select('skin').eq('id', uid).single()
-            if (profileError) {
+            
+            let { data: profile, error: profileError } = await supabase.from('profiles').select('skin').eq('id', uid).single()
+            
+            // If profile doesn't exist, create it
+            if (!profile && !profileError) {
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({ id: uid, skin: '009', visited_realms: [] })
+                    .select()
+                    .single()
+                
+                if (newProfile) {
+                    profile = newProfile
+                } else {
+                    console.log('Error creating profile:', createError)
+                    return rejectJoin('Failed to create profile.')
+                }
+            }
+            
+            if (profileError || !profile) {
                 return rejectJoin('Failed to get profile.')
             }
 

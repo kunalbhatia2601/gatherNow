@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={dmSans.className}>
-      <body>
+    <html lang="en" className={dmSans.className} suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true}>
         <Layout>
             {children}
         </Layout>

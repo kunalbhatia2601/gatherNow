@@ -7,6 +7,17 @@ import { sessionManager } from '../session'
 export default function routes(): Router {
     const router = Router()
 
+    router.get('/', async (req, res) => {
+        res.send(
+            {
+                status: 'ok',
+                message: 'Server is running.',
+                timestamp: new Date().toISOString(),
+                path: req.path
+            }
+        )
+    })
+
     router.get('/getPlayersInRoom', async (req, res) => {
         const access_token = req.headers.authorization?.split(' ')[1];
 

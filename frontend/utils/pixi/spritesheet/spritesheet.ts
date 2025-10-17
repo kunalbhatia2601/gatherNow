@@ -50,8 +50,33 @@ class Sprites {
         await this.sheets[sheetName]!.parse()
     }
 
-    public async getSpriteForTileJSON(tilename: string) {
+    public async getSpriteForTileJSON(tilename: string): Promise<{ sprite: PIXI.Sprite; data: SpriteSheetTile }> {
+        // Handle legacy single-name tiles (like "grass")
+        if (!tilename.includes('-')) {
+            // Map legacy tile names to new format
+            const legacyMapping: { [key: string]: string } = {
+                'grass': 'ground-light_solid_grass',
+                'dirt': 'ground-solid_dirt',
+                'sand': 'ground-solid_sand'
+            }
+            
+            if (legacyMapping[tilename]) {
+                tilename = legacyMapping[tilename]
+            } else {
+                // Default fallback for unknown legacy tiles
+                console.warn(`Unknown legacy tile "${tilename}", using default grass`)
+                tilename = 'ground-light_solid_grass'
+            }
+        }
+        
         const [sheetName, spriteName] = tilename.split('-')
+        
+        // Validate sheet name
+        if (!this.spriteSheetDataSet[sheetName as SheetName]) {
+            console.error(`Sheet ${sheetName} not found, using default`)
+            return this.getSpriteForTileJSON('ground-light_solid_grass')
+        }
+        
         await this.load(sheetName as SheetName)
         return {
             sprite: this.getSprite(sheetName as SheetName, spriteName),

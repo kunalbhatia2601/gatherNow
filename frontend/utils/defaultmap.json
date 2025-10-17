@@ -8,10 +8,10 @@
     {
       "name": "Main Room", 
       "tilemap": {
-        "5,5": {"floor": "grass"},
-        "6,5": {"floor": "grass"},
-        "5,6": {"floor": "grass"},
-        "6,6": {"floor": "grass"}
+        "5,5": {"floor": "ground-light_solid_grass"},
+        "6,5": {"floor": "ground-light_solid_grass"},
+        "5,6": {"floor": "ground-light_solid_grass"},
+        "6,6": {"floor": "ground-light_solid_grass"}
       }
     }
   ]
